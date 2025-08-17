@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vintage Threads — $700 Tier Demo</title>
+  <meta name="description" content="Multi‑page vintage shop demo in a single file: cart, filters, hash routing, theme toggle." />
+  <style>
+    :root {
+      --bg: #faf7f2; --ink: #252422; --accent: #b07f49; --accent-2: #6a4f2b; --muted: #8a817c; --paper: #ffffff;
+    }
+    :root.dark { --bg:#191615; --ink:#f0eae4; --paper:#231f1c; --muted:#b4a9a2; --accent:#d9b789; --accent-2:#c59a63; }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial}
+    a{color:var(--accent-2);text-decoration:none} a:hover{text-decoration:underline}
+    .page{max-width:1120px;margin:0 auto;padding:0 1rem}
+    .hdr{position:sticky;top:0;z-index:40;background:rgba(250,247,242,.9);backdrop-filter:saturate(180%) blur(8px);border-bottom:1px solid #e9e4dc;display:flex;align-items:center;justify-content:space-between;padding:.6rem 1rem}
+    .brand{display:flex;align-items:center;gap:.6rem}
+    .logo{width:36px;height:36px;border-radius:50%;background:radial-gradient(60% 60% at 50% 40%, var(--accent) 0%, var(--accent-2) 70%, #3a2a16 100%);box-shadow:inset 0 0 0 2px #fff8;border:1px solid #0001}
+    .brand-text{display:flex;flex-direction:column;line-height:1}.brand-text small{color:var(--muted)}
+    .nav{display:flex;gap:1rem;font-weight:600;flex-wrap:wrap}
+    .badge{background:#0001;padding:.1rem .45rem;border-radius:999px;font-size:.8rem}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;padding:.6rem .9rem;border-radius:999px;border:1px solid #d9d1c6;background:var(--paper);color:var(--ink);box-shadow:0 1px 0 #0001,0 10px 20px -14px #0003;transition:transform .06s ease,box-shadow .2s ease}
+    .btn:hover{transform:translateY(-1px);box-shadow:0 2px 0 #0001,0 16px 26px -16px #0005}
+    .btn.accent{background:linear-gradient(180deg,#cfa474,var(--accent));color:#140e08;border-color:#ad7c44}
+    .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:1.2rem;align-items:center;padding:2rem 0 1rem}
+    .hero-card{background:var(--paper);border:1px solid #e8e1d7;border-radius:20px;padding:2rem;box-shadow:0 24px 60px -30px #3a2a161f}
+    .lede{font-size:1.1rem;color:var(--muted)}
+    .hero-img{border-radius:20px;height:420px;background:linear-gradient(180deg,#0000000a,#00000030),url('https://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=1400&auto=format&fit=crop') center/cover no-repeat;border:1px solid #e8e1d7;box-shadow:0 24px 60px -30px #3a2a1626}
+    .section{padding:2rem 0}
+    .row{display:flex;gap:.6rem;flex-wrap:wrap}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+    @media (max-width:900px){.grid{grid-template-columns:1fr 1fr}.hero{grid-template-columns:1fr}}
+    @media (max-width:620px){.grid{grid-template-columns:1fr}}
+    .card{background:var(--paper);border:1px solid #e8e1d7;border-radius:16px;overflow:hidden;box-shadow:0 18px 50px -30px #3a2a161a;display:flex;flex-direction:column}
+    .card img{width:100%;height:240px;object-fit:cover}
+    .card-body{padding:.9rem .9rem 1.1rem;display:grid;gap:.4rem}
+    .price{font-weight:800;color:var(--accent-2)}
+    .muted{color:var(--muted)}
+    .promo{background:#f2ece4;border:1px solid #e8e1d7;border-radius:16px;margin:1rem 0 2rem}.promo-inner{padding:.9rem 1rem;text-align:center}
+    .about{background:#f5efe6;border:1px solid #e8e1d7;border-radius:16px;padding:1.5rem}
+    .contact{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}.contact .full{grid-column:1 / -1}
+    label{font-weight:700;font-size:.9rem}
+    input,textarea,select{width:100%;padding:.8rem .9rem;border:1px solid #ded6cb;border-radius:12px;background:var(--paper);font:inherit}
+    textarea{min-height:120px}
+    .masonry{column-count:3;column-gap:1rem}.masonry img{width:100%;margin:0 0 1rem;border-radius:14px;border:1px solid #e8e1d7}
+    @media (max-width:900px){.masonry{column-count:2}}@media (max-width:600px){.masonry{column-count:1}}
+    details{background:var(--paper);border:1px solid #e8e1d7;border-radius:12px;padding:.6rem .9rem;margin:.6rem 0}
+    .ftr{margin-top:2rem;background:#f2ece4;border-top:1px solid #e8e1d7}
+    .ftr-grid{display:grid;grid-template-columns:1.2fr .8fr .6fr;gap:1rem;max-width:1120px;margin:0 auto;padding:1rem}
+    .chips{display:flex;gap:.5rem;flex-wrap:wrap}.chip{border:1px solid #dfd7cd;padding:.3rem .6rem;border-radius:999px;font-size:.85rem;color:#4a433d;background:#fff}
+    .drawer{position:fixed;inset:0;background:#0008;display:none}.drawer[aria-hidden="false"]{display:block}
+    .drawer-inner{position:absolute;right:0;top:0;bottom:0;width:min(420px,100%);background:var(--paper);display:flex;flex-direction:column;border-left:1px solid #e8e1d7}
+    .drawer-head{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1rem;border-bottom:1px solid #eee3}
+    .drawer-body{padding:.6rem 1rem;overflow:auto;flex:1;display:grid;gap:.6rem}
+    .drawer-foot{padding:.9rem 1rem;border-top:1px solid #eee3;display:flex;justify-content:space-between;align-items:center}
+    .icon{background:none;border:none;font:inherit;cursor:pointer}
+  </style>
+</head>
+<body>
+<header class="hdr">
+  <a class="brand" href="#/">
+    <span class="logo" aria-hidden="true"></span>
+    <span class="brand-text"><strong>Vintage Threads</strong><small>Curated Retro Clothing</small></span>
+  </a>
+  <nav class="nav" aria-label="Primary">
+    <a href="#/products">Shop</a>
+    <a href="#/lookbook">Lookbook</a>
+    <a href="#/about">About</a>
+    <a href="#/faq">FAQ</a>
+    <a href="#/contact">Contact</a>
+  </nav>
+  <div class="hdr-actions">
+    <button id="themeToggle" aria-label="Toggle theme">🌓</button>
+    <button id="cartBtn" class="btn">Cart <span id="cartCount" class="badge">0</span></button>
+  </div>
+</header>
+
+<div id="cartDrawer" class="drawer" aria-hidden="true">
+  <div class="drawer-inner" role="dialog" aria-labelledby="cartTitle">
+    <div class="drawer-head">
+      <h2 id="cartTitle">Your Cart</h2>
+      <button id="closeCart" aria-label="Close cart" class="icon">✕</button>
+    </div>
+    <div id="cartItems" class="drawer-body"></div>
+    <div class="drawer-foot">
+      <div>Total: <strong id="cartTotal">$0.00</strong></div>
+      <button id="checkoutBtn" class="btn accent">Checkout (demo)</button>
+    </div>
+  </div>
+</div>
+
+<main id="app" class="page"></main>
+
+<footer class="ftr">
+  <div class="ftr-grid">
+    <div>
+      <strong>Vintage Threads</strong>
+      <p>123 Market St, Suite B • Mon–Sat 11–6 • Sun 12–4</p>
+      <p class="muted">© <span id="year"></span> Vintage Threads</p>
+    </div>
+    <div><div class="chips"><span class="chip">Mobile‑friendly</span><span class="chip">SEO + OG</span><span class="chip">PWA‑style demo</span><span class="chip">Simple cart</span></div></div>
+    <div class="social"><a href="#" aria-label="Instagram">📷</a><a href="#" aria-label="TikTok">🎵</a><a href="#" aria-label="Pinterest">📌</a></div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const $ = (s,r=document)=>r.querySelector(s); const $$ = (s,r=document)=>Array.from(r.querySelectorAll(s));
+  const app = document.getElementById('app');
+  // Theme
+  const themeKey='vt_theme'; if(localStorage.getItem(themeKey)==='dark') document.documentElement.classList.add('dark');
+  $('#themeToggle').addEventListener('click',()=>{document.documentElement.classList.toggle('dark');localStorage.setItem(themeKey,document.documentElement.classList.contains('dark')?'dark':'light')});
+  // Year
+  $('#year').textContent = new Date().getFullYear();
+
+  // Data (inline for canvas)
+  const PRODUCTS = [
+    {id:1,name:"Levi's Trucker (80s)",price:98,category:"jackets",size:"M",note:"Faded indigo • Minor distressing",image:"https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=1400&auto=format&fit=crop",alt:"Vintage denim jacket on hanger"},
+    {id:2,name:"Band Tee Grab Bag",price:35,category:"tees",size:"L",note:"Assorted 90s prints",image:"https://images.unsplash.com/photo-1548625361-58a9b86aa83b?q=80&w=1400&auto=format&fit=crop",alt:"Stack of vintage band t‑shirts"},
+    {id:3,name:"Floral Day Dress (70s)",price:64,category:"dresses",size:"S",note:"Cotton • Excellent condition",image:"https://images.unsplash.com/photo-1515669097368-22e68427d265?q=80&w=1400&auto=format&fit=crop",alt:"Vintage floral dress on mannequin"},
+    {id:4,name:"Leather Bomber (90s)",price:149,category:"jackets",size:"L",note:"Soft patina • Fully lined",image:"https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1400&auto=format&fit=crop",alt:"Vintage leather jacket on rack"},
+    {id:5,name:"Corduroy Cap",price:22,category:"accessories",size:"OS",note:"Rust cord • Adjustable",image:"https://images.unsplash.com/photo-1455587734955-081b22074882?q=80&w=1400&auto=format&fit=crop",alt:"Vintage cap on table"}
+  ];
+
+  // Cart
+  const cartKey='vt_cart_canvas'; const cartBtn=$('#cartBtn'); const cartDrawer=$('#cartDrawer'); const closeCart=$('#closeCart');
+  const cartItemsEl=$('#cartItems'); const cartTotalEl=$('#cartTotal'); const cartCountEl=$('#cartCount');
+  const readCart=()=>JSON.parse(localStorage.getItem(cartKey)||'[]'); const writeCart=c=>localStorage.setItem(cartKey,JSON.stringify(c));
+  const money=n=>`$${n.toFixed(2)}`; function updateBadge(){const c=readCart();cartCountEl.textContent=c.reduce((a,i)=>a+i.qty,0)} updateBadge();
+  function openCart(){cartDrawer.setAttribute('aria-hidden','false'); renderCart()} function closeCartFn(){cartDrawer.setAttribute('aria-hidden','true')}
+  cartBtn.addEventListener('click',openCart); closeCart.addEventListener('click',closeCartFn); cartDrawer.addEventListener('click',e=>{if(e.target===cartDrawer)closeCartFn()});
+  function renderCart(){const items=readCart(); if(!items.length){cartItemsEl.innerHTML='<p class="muted">Your cart is empty.</p>'; cartTotalEl.textContent='$0.00'; return}
+    cartItemsEl.innerHTML=''; let total=0; items.forEach(it=>{total+=it.price*it.qty; const row=document.createElement('div'); row.className='row'; row.style.justifyContent='space-between'; row.innerHTML=`
+      <div><div><strong>${it.name}</strong></div><div class="muted">${it.category} • ${it.size||'One size'}</div></div>
+      <div style="display:flex;gap:.4rem;align-items:center">
+        <button class="icon" data-dec="${it.id}">−</button><span>${it.qty}</span><button class="icon" data-inc="${it.id}">+</button>
+        <span style="width:80px;text-align:right">${money(it.price*it.qty)}</span><button class="icon" data-del="${it.id}">✕</button>
+      </div>`; cartItemsEl.appendChild(row)}); cartTotalEl.textContent=money(total);
+    cartItemsEl.onclick=(e)=>{const t=e.target; if(!(t instanceof Element)) return; const id=t.getAttribute('data-inc')||t.getAttribute('data-dec')||t.getAttribute('data-del'); if(!id) return; let c=readCart(); const idx=c.findIndex(x=>String(x.id)===String(id)); if(idx===-1) return; if(t.hasAttribute('data-inc')) c[idx].qty++; else if(t.hasAttribute('data-dec')) c[idx].qty=Math.max(1,c[idx].qty-1); else if(t.hasAttribute('data-del')) c.splice(idx,1); writeCart(c); renderCart(); updateBadge(); };
+  }
+  function addToCart(item){let c=readCart();const i=c.findIndex(x=>x.id===item.id); if(i>-1) c[i].qty+=(item.qty||1); else c.push({...item,qty:item.qty||1}); writeCart(c); updateBadge(); openCart();}
+
+  // Views
+  const Views = {
+    home(){ return `
+      <section class=\"hero\"><div class=\"hero-card\"><h1>Handpicked vintage with a story in every stitch.</h1>
+      <p class=\"lede\">From 70s denim to 90s tees, we rescue timeless pieces and get them ready for their next chapter — yours.</p>
+      <div class=\"row\"><a class=\"btn accent\" href=\"#/products\">Shop featured</a><a class=\"btn\" href=\"#/lookbook\">View lookbook</a></div></div>
+      <div class=\"hero-img\" role=\"img\" aria-label=\"Rack of vintage jackets and shirts\"></div></section>
+      <section class=\"section\"><h2>Fresh Finds</h2><div id=\"featuredGrid\" class=\"grid\"></div><p class=\"muted\">This is a demo storefront. Replace images, prices, and descriptions with your inventory.</p></section>
+      <section class=\"promo\"><div class=\"promo-inner\"><strong>Free local pickup</strong> on orders over $50 • <em>Low‑waste shipping</em> on all orders.</div></section>
+      <section class=\"section\"><h2>Join the list</h2><p class=\"muted\">New drops, sizing tips, and market pop-ups. No spam.</p>
+        <form id=\"newsletterForm\" class=\"row\" novalidate>
+          <input id=\"newsletterEmail\" type=\"email\" placeholder=\"you@example.com\" required />
+          <button class=\"btn accent\" type=\"submit\">Subscribe</button>
+          <span id=\"nlStatus\" class=\"muted\" aria-live=\"polite\"></span>
+        </form>
+      </section>`; },
+
+    products(){ return `
+      <section class=\"section\"><h1>Shop</h1>
+        <div class=\"row\">
+          <select id=\"filterCategory\"><option value=\"\">All categories</option><option value=\"jackets\">Jackets</option><option value=\"tees\">Tees</option><option value=\"dresses\">Dresses</option><option value=\"accessories\">Accessories</option></select>
+          <select id=\"sortBy\"><option value=\"featured\">Sort: Featured</option><option value=\"price-asc\">Price: Low to High</option><option value=\"price-desc\">Price: High to Low</option></select>
+          <input id=\"searchInput\" placeholder=\"Search...\" />
+        </div>
+        <div id=\"productsGrid\" class=\"grid\"></div>
+      </section>`; },
+
+    lookbook(){ return `
+      <section class=\"section\"><h1>Lookbook</h1>
+        <div class=\"masonry\">
+          <img src=\"https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=1200&auto=format&fit=crop\" alt=\"Denim jacket\" />
+          <img src=\"https://images.unsplash.com/photo-1548625361-58a9b86aa83b?q=80&w=1200&auto=format&fit=crop\" alt=\"Band tees\" />
+          <img src=\"https://images.unsplash.com/photo-1515669097368-22e68427d265?q=80&w=1200&auto=format&fit=crop\" alt=\"Floral dress\" />
+          <img src=\"https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1200&auto=format&fit=crop\" alt=\"Vintage leather\" />
+          <img src=\"https://images.unsplash.com/photo-1455587734955-081b22074882?q=80&w=1200&auto=format&fit=crop\" alt=\"Analog vibe\" />
+        </div>
+      </section>`; },
+
+    about(){ return `
+      <section class=\"section\"><h1>Our Process</h1>
+        <div class=\"about\"><p>We source small batches from estate sales, trusted pickers, and community closets. Each piece is laundered, repaired if needed, and photographed in natural light to reflect true color and wear.</p>
+          <ul><li><strong>Measured & labeled</strong> — measurements in inches and centimeters.</li><li><strong>Transparent grading</strong> — from \"mint\" to \"distressed\".</li><li><strong>Low‑waste shipping</strong> — recycled mailers and minimal plastic.</li></ul>
+        </div>
+      </section>`; },
+
+    faq(){ return `
+      <section class=\"section\"><h1>FAQ</h1>
+        <details open><summary>Do you accept returns?</summary><p>Yes, within 7 days of delivery for store credit. Buyer pays return shipping. Items must be in original condition.</p></details>
+        <details><summary>How do you grade condition?</summary><p>We use a 5‑point scale: Mint, Excellent, Good, Worn, Distressed. Each listing explains flaws and shows closeups.</p></details>
+        <details><summary>Do you ship internationally?</summary><p>Yes. Rates shown at checkout. Customs/VAT are buyer’s responsibility.</p></details>
+        <details><summary>How do I find my size?</summary><p>Each item lists flat measurements (in/cm). Compare to a similar garment you own.</p></details>
+      </section>`; },
+
+    contact(){ return `
+      <section class=\"section\"><h1>Contact</h1><p class=\"muted\">Questions about sizing, sourcing, or local pickup? Send us a note.</p>
+        <form id=\"contactForm\" class=\"contact\" novalidate>
+          <div><label for=\"name\">Name</label><input id=\"name\" name=\"name\" required placeholder=\"Your name\" /></div>
+          <div><label for=\"email\">Email</label><input id=\"email\" name=\"email\" type=\"email\" required placeholder=\"you@example.com\" /></div>
+          <div><label for=\"topic\">Topic</label><select id=\"topic\" name=\"topic\" required><option value=\"\" disabled selected>Select one…</option><option>Inventory question</option><option>Sell / consign</option><option>Collab / event</option><option>Other</option></select></div>
+          <div class=\"full\"><label for=\"message\">Message</label><textarea id=\"message\" name=\"message\" required placeholder=\"How can we help?\"></textarea></div>
+          <div class=\"full row\"><button class=\"btn accent\" type=\"submit\">Send message</button><span id=\"formStatus\" class=\"muted\" aria-live=\"polite\"></span></div>
+        </form>
+      </section>`; }
+  };
+
+  function cardHTML(p){return `<article class=\"card\"><img src=\"${p.image}\" alt=\"${p.alt}\"/><div class=\"card-body\"><h3>${p.name}</h3><div class=\"price\">$${p.price}</div><p class=\"muted\">${p.note}</p><button class=\"btn\" data-add='${JSON.stringify({id:p.id,name:p.name,price:p.price,category:p.category,size:p.size})}'>Add to cart</button></div></article>`}
+
+  async function render(){
+    const route = location.hash.replace('#','').toLowerCase() || '/';
+    let html = '';
+    if(route==='/'||route==='/home'){ html = Views.home(); }
+    else if(route.startsWith('/products')){ html = Views.products(); }
+    else if(route.startsWith('/lookbook')){ html = Views.lookbook(); }
+    else if(route.startsWith('/about')){ html = Views.about(); }
+    else if(route.startsWith('/faq')){ html = Views.faq(); }
+    else if(route.startsWith('/contact')){ html = Views.contact(); }
+    else { html = '<section class=section><h1>Not found</h1></section>'; }
+    app.innerHTML = html;
+
+    // Home featured
+    if($('#featuredGrid')){ $('#featuredGrid').innerHTML = PRODUCTS.slice(0,3).map(cardHTML).join(''); }
+
+    // Products page behaviors
+    if($('#productsGrid')){
+      const grid=$('#productsGrid'); const renderList=list=>grid.innerHTML=list.map(cardHTML).join('');
+      renderList(PRODUCTS);
+      $('#filterCategory').addEventListener('change',e=>{ const v=e.target.value; const list=v?PRODUCTS.filter(p=>p.category===v):PRODUCTS; renderList(list) });
+      $('#sortBy').addEventListener('change',e=>{ const v=e.target.value; const list=[...PRODUCTS]; if(v==='price-asc') list.sort((a,b)=>a.price-b.price); if(v==='price-desc') list.sort((a,b)=>b.price-a.price); renderList(list); });
+      $('#searchInput').addEventListener('input',e=>{ const q=e.target.value.toLowerCase(); const list=PRODUCTS.filter(p=>(p.name+p.note).toLowerCase().includes(q)); renderList(list); });
+    }
+
+    // Newsletter
+    const nlForm=$('#newsletterForm'); const nlEmail=$('#newsletterEmail'); const nlStatus=$('#nlStatus');
+    nlForm?.addEventListener('submit',e=>{e.preventDefault(); const email=String(nlEmail?.value||'').trim(); if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ if(nlStatus) nlStatus.textContent='Please enter a valid email.'; return;} if(nlStatus) nlStatus.textContent='Subscribed! (demo)'; nlForm.reset(); });
+
+    // Contact form
+    const cForm=$('#contactForm'); const cStatus=$('#formStatus');
+    cForm?.addEventListener('submit',e=>{e.preventDefault(); const name=cForm.name.value.trim(); const email=cForm.email.value.trim(); const topic=cForm.topic.value; const message=cForm.message.value.trim(); if(!name||!email||!topic||!message){ if(cStatus) cStatus.textContent='Please complete all fields.'; return;} if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ if(cStatus) cStatus.textContent='Please enter a valid email address.'; return;} if(cStatus) cStatus.textContent="Thanks! We'll reply within 1–2 business days. (demo)"; cForm.reset(); });
+
+    // Global add to cart
+    document.body.addEventListener('click',e=>{ const t=e.target; if(!(t instanceof Element)) return; const data=t.getAttribute('data-add'); if(!data) return; try{ const item=JSON.parse(data); addToCart(item);}catch(_){} });
+  }
+
+  window.addEventListener('hashchange', render);
+  render();
+})();
+</script>
+</body>
+</html>

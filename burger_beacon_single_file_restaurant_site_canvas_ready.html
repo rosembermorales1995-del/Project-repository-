@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Burger Beacon — Smash Burgers, Shakes & Fries</title>
+  <meta name="description" content="Burger Beacon: neighborhood smash burgers, hand‑cut fries, classic shakes. Dine‑in • Takeout • Call‑ahead." />
+  <style>
+    :root{--bg:#fffdf8;--ink:#1f1a17;--paper:#ffffff;--muted:#867d76;--accent:#d0482f;--accent-2:#2f1e12}
+    :root.dark{--bg:#171311;--ink:#f1ebe6;--paper:#221d1a;--muted:#b8aea7;--accent:#f36c52;--accent-2:#f1c39f}
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Inter,Arial}
+    a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+    .page{max-width:1000px;margin:0 auto;padding:0 1rem}
+    .hdr{position:sticky;top:0;z-index:30;background:rgba(255,253,248,.9);backdrop-filter:saturate(180%) blur(8px);border-bottom:1px solid #efe7de;display:flex;align-items:center;justify-content:space-between;padding:.6rem 1rem}
+    .brand{display:flex;gap:.6rem;align-items:center}
+    .logo{width:40px;height:40px;border-radius:10px;background:
+      conic-gradient(from 0deg,#ffdf7a 0 90deg,#d0482f 90 180deg,#2f1e12 180 270deg,#ffd0bf 270 360deg);
+      border:2px solid #ffffffaa;box-shadow:0 6px 18px -8px #00000050}
+    .brand b{letter-spacing:.05em}
+    .nav{display:flex;gap:1rem;flex-wrap:wrap;font-weight:600}
+    .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.55rem .9rem;border:1px solid #e7ddd3;border-radius:999px;background:var(--paper);box-shadow:0 1px 0 #00000010,0 10px 20px -14px #0003}
+    .btn.primary{background:linear-gradient(180deg,#ffd2c6,var(--accent));color:#2b0e07;border-color:#eaa08f}
+    .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:1rem;align-items:center;padding:2rem 0 1rem}
+    .hero-card{background:var(--paper);border:1px solid #efe7de;border-radius:20px;padding:1.5rem;box-shadow:0 24px 60px -30px #2b12071a}
+    .lede{color:var(--muted)}
+    .hero-img{border-radius:20px;height:380px;background:
+      linear-gradient(180deg,#0000000a,#00000030),
+      url('https://images.unsplash.com/photo-1550317138-10000687a72b?q=80&w=1400&auto=format&fit=crop') center/cover no-repeat;
+      border:1px solid #efe7de;box-shadow:0 24px 60px -30px #0002}
+    .section{padding:1.8rem 0}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+    @media (max-width:840px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr}}
+    .menu-card{background:var(--paper);border:1px solid #efe7de;border-radius:16px;padding:1rem}
+    .menu-head{display:flex;align-items:baseline;justify-content:space-between;gap:1rem}
+    .item{display:grid;grid-template-columns:1fr auto;gap:.3rem;padding:.5rem 0;border-bottom:1px dashed #e9dfd5}
+    .item:last-child{border-bottom:none}
+    .note{grid-column:1 / -1;color:var(--muted);font-size:.95rem}
+    .pill{border:1px solid #e7ddd3;border-radius:999px;padding:.1rem .45rem;font-size:.8rem;color:#3a2e26;background:#fff}
+    .muted{color:var(--muted)}
+    .about{background:#fff5ea;border:1px solid #efe2d6;border-radius:14px;padding:1rem}
+    .hours{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+    .foot{margin-top:1rem;border-top:1px solid #efe7de;padding:1rem 0;color:var(--muted);display:flex;justify-content:space-between;gap:.6rem;flex-wrap:wrap}
+  </style>
+</head>
+<body>
+<header class="hdr">
+  <a class="brand" href="#home" aria-label="Burger Beacon home">
+    <span class="logo" aria-hidden="true"></span>
+    <span><b>BURGER BEACON</b><br><small class="muted">Smash Burgers • Shakes • Fries</small></span>
+  </a>
+  <nav class="nav" aria-label="Primary">
+    <a href="#menu">Menu</a>
+    <a href="#about">About</a>
+    <a href="#visit">Hours & Location</a>
+    <button id="printBtn" class="btn" title="Print menu">🖨️ Print menu</button>
+    <button id="themeBtn" class="btn" title="Toggle dark mode">🌓</button>
+  </nav>
+</header>
+
+<main class="page">
+  <section class="hero" id="home" aria-labelledby="home-title">
+    <div class="hero-card">
+      <h1 id="home-title">Neighborhood smash burgers done right.</h1>
+      <p class="lede">Brisket‑blend patties, toasted potato buns, crinkle‑cut fries, and diner‑style shakes. Dine‑in, takeout, or call‑ahead. No online ordering, no third‑party fees.</p>
+      <div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.6rem">
+        <a href="#menu" class="btn primary">See the Menu</a>
+        <a href="#visit" class="btn">Where to find us</a>
+      </div>
+    </div>
+    <div class="hero-img" role="img" aria-label="Stacked cheeseburger with melted cheese"></div>
+  </section>
+
+  <!-- MENU -->
+  <section id="menu" class="section" aria-labelledby="menu-title">
+    <h2 id="menu-title">Menu</h2>
+    <p class="muted">Prices include tax where applicable. Substitute a gluten‑free bun +$2. Add fries + drink for a combo (+$4).</p>
+
+    <div class="grid">
+      <!-- Burgers -->
+      <div class="menu-card" aria-labelledby="burgers-title">
+        <div class="menu-head"><h3 id="burgers-title">Burgers</h3><span class="pill">Angus brisket‑blend · 3.5 oz patty</span></div>
+        <div class="item"><strong>Classic Smash</strong><span>$7.50</span><div class="note">American cheese, pickles, shredded lettuce, mustard‑mayo.</div></div>
+        <div class="item"><strong>Double Smash</strong><span>$10.50</span><div class="note">Two patties, double cheese, house sauce.</div></div>
+        <div class="item"><strong>Bacon Beacon</strong><span>$11.50</span><div class="note">Applewood bacon, cheddar, crispy onions, smoky aioli.</div></div>
+        <div class="item"><strong>Green Chile Crunch</strong><span>$11.25</span><div class="note">Roasted green chiles, pepper jack, tortilla crunch, lime crema.</div></div>
+        <div class="item"><strong>Mushroom Swiss</strong><span>$10.75</span><div class="note">Garlic mushrooms, Swiss, thyme butter.</div></div>
+        <div class="item"><strong>The Fire Drill</strong><span>$11.75</span><div class="note">Jalapeños, hot honey, chipotle mayo, pepper jack.</div></div>
+        <div class="item"><strong>Veggie Smash</strong><span>$9.75</span><div class="note">Crispy smashed black‑bean patty, avocado, lettuce, tomato, vegan mayo. <em>(V)</em></div></div>
+      </div>
+
+      <!-- Sides -->
+      <div class="menu-card" aria-labelledby="sides-title">
+        <div class="menu-head"><h3 id="sides-title">Fries & Sides</h3><span class="pill">Cooked in canola oil</span></div>
+        <div class="item"><strong>Crinkle‑Cut Fries</strong><span>$3.50</span><div class="note">Sea salt.</div></div>
+        <div class="item"><strong>Loaded Fries</strong><span>$6.75</span><div class="note">Cheese sauce, scallions, bacon crumbles.</div></div>
+        <div class="item"><strong>Onion Rings</strong><span>$4.75</span><div class="note">Buttermilk battered.</div></div>
+        <div class="item"><strong>Side Salad</strong><span>$4.25</span><div class="note">Greens, tomato, pickled onion, house vinaigrette.</div></div>
+      </div>
+
+      <!-- Shakes & Drinks -->
+      <div class="menu-card" aria-labelledby="drinks-title">
+        <div class="menu-head"><h3 id="drinks-title">Shakes & Drinks</h3><span class="pill">Real ice cream</span></div>
+        <div class="item"><strong>Classic Shake</strong><span>$5.50</span><div class="note">Vanilla • Chocolate • Strawberry.</div></div>
+        <div class="item"><strong>Cookies & Cream Shake</strong><span>$6.25</span><div class="note">Crushed chocolate cookies.</div></div>
+        <div class="item"><strong>Sodas</strong><span>$2.50</span><div class="note">Cola, Diet, Lemon‑Lime, Root Beer.</div></div>
+        <div class="item"><strong>Brewed Iced Tea</strong><span>$2.25</span><div class="note">Sweet or unsweet.</div></div>
+      </div>
+
+      <!-- Kids & Add‑ons -->
+      <div class="menu-card" aria-labelledby="kids-title">
+        <div class="menu-head"><h3 id="kids-title">Kids & Add‑Ons</h3><span class="pill">12 & under</span></div>
+        <div class="item"><strong>Kids Burger</strong><span>$6.00</span><div class="note">Single patty, cheese, fries, small drink.</div></div>
+        <div class="item"><strong>Chicken Bites</strong><span>$6.25</span><div class="note">All‑white meat, fries, small drink.</div></div>
+        <div class="item"><strong>Extra Patty</strong><span>$3.25</span><div class="note">Make it a double.</div></div>
+        <div class="item"><strong>Gluten‑Free Bun</strong><span>$2.00</span><div class="note">Substitute on any burger.</div></div>
+        <div class="item"><strong>House Sauces</strong><span>$0.75</span><div class="note">Smoky aioli • Hot honey • Ranch • Chipotle mayo • BBQ.</div></div>
+      </div>
+    </div>
+
+    <p class="muted" style="margin-top:1rem">Allergens: Items may contain or come into contact with gluten, dairy, soy, eggs, or nuts. Please notify us of allergies before ordering.</p>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="section" aria-labelledby="about-title">
+    <h2 id="about-title">About</h2>
+    <div class="about">
+      <p>We started Burger Beacon to keep burger‑night simple: quality beef, crisp edges, melty cheese, and fresh buns toasted right on the flat‑top. We hand‑cut our fries every morning and spin shakes to order.</p>
+      <p class="muted">We do not process online payments or delivery — call ahead for pickup and pay in person.</p>
+    </div>
+  </section>
+
+  <!-- VISIT -->
+  <section id="visit" class="section" aria-labelledby="visit-title">
+    <h2 id="visit-title">Hours & Location</h2>
+    <div class="hours">
+      <div>
+        <h3>Hours</h3>
+        <ul>
+          <li>Mon–Thu: 11:00a – 9:00p</li>
+          <li>Fri–Sat: 11:00a – 10:00p</li>
+          <li>Sun: 12:00p – 8:00p</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Find Us</h3>
+        <p>215 Market Ave, Suite A<br>Springfield, USA</p>
+        <p>Call‑ahead: <a href="tel:+15551234567">(555) 123‑4567</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="foot">
+    <span>© <span id="year"></span> Burger Beacon</span>
+    <span class="muted">Dine‑in • Takeout • Call‑ahead</span>
+  </section>
+</main>
+
+<script>
+  // Dark mode toggle + print button
+  const themeBtn = document.getElementById('themeBtn');
+  const printBtn = document.getElementById('printBtn');
+  const key='bb_theme';
+  if(localStorage.getItem(key)==='dark') document.documentElement.classList.add('dark');
+  themeBtn.addEventListener('click',()=>{
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem(key, document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+  });
+  printBtn.addEventListener('click',()=>{ window.print(); });
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>

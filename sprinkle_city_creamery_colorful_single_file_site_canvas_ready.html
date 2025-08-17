@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sprinkle City Creamery — Scoops • Sundaes • Smiles</title>
+  <meta name="description" content="Sprinkle City Creamery — small‑batch ice cream, sorbets, floats, open‑mic nights, and community events." />
+  <meta name="theme-color" content="#ff8ccf" />
+  <style>
+    /* ==== Playful, colorful theme ==== */
+    :root{
+      --bg: #fffdfb;
+      --ink: #2a2133;
+      --paper: #ffffff;
+      --muted: #6b5d73;
+      --pink: #ff8ccf;
+      --yellow: #ffd86b;
+      --blue: #7ed8ff;
+      --mint: #a8f0d1;
+      --lav: #cbb8ff;
+      --choc: #59342b;
+      --shadow: 0 24px 60px -30px #2a21331f;
+    }
+    :root.dark{
+      --bg:#1b1520; --ink:#f8f4fb; --paper:#231a2a; --muted:#c7bcd0; --shadow: 0 24px 60px -30px #00000066;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:ui-rounded, system-ui, -apple-system, Segoe UI, Inter, Arial}
+    a{color:#4b2ea7;text-decoration:none} a:hover{text-decoration:underline}
+    .page{max-width:1160px;margin:0 auto;padding:0 1rem}
+
+    /* Header */
+    .hdr{position:sticky;top:0;z-index:50;background:rgba(255,253,251,.9);backdrop-filter:saturate(180%) blur(10px);border-bottom:1px solid #f2eaf6;display:flex;align-items:center;justify-content:space-between;padding:.6rem 1rem}
+    .brand{display:flex;gap:.6rem;align-items:center}
+    .scoop{width:40px;height:40px;border-radius:50%;background:radial-gradient(circle at 30% 30%, var(--pink), #ff6fab 60%, #ff4d97 100%);box-shadow:inset 0 0 0 2px #ffffffaa, 0 6px 18px -8px #ff2e9a66}
+    .drip{width:22px;height:14px;border-bottom-left-radius:22px 14px;border-bottom-right-radius:22px 14px;margin-top:-6px;background:linear-gradient(180deg,#ff8ccf,#ff5fb3)}
+    .brand b{letter-spacing:.05em}
+    .nav{display:flex;gap:1rem;flex-wrap:wrap;font-weight:700}
+    .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.55rem .9rem;border:1px solid #eedff5;border-radius:999px;background:var(--paper);box-shadow:0 1px 0 #0001,0 10px 20px -14px #00000030}
+    .btn.primary{background:linear-gradient(180deg, #ffe2f5, var(--pink)); color:#3a0e2a; border-color:#f1a8d7}
+    .badge{background:#00000010;padding:.1rem .5rem;border-radius:999px;font-size:.8rem}
+
+    /* Sprinkles background canvas */
+    #sprinkles{position:fixed;inset:0;pointer-events:none;opacity:.18;mix-blend-mode:multiply;z-index:0}
+
+    /* Hero */
+    .hero{position:relative;z-index:1;display:grid;grid-template-columns:1.05fr .95fr;gap:1.2rem;align-items:center;padding:2rem 0 1.2rem}
+    .hero-card{background:linear-gradient(180deg,#fff,#fff6fb);border:1px solid #f1e6f6;border-radius:22px;padding:1.6rem;box-shadow:var(--shadow)}
+    .lede{color:var(--muted)}
+    .hero-media{border-radius:22px;overflow:hidden;border:1px solid #f1e6f6;box-shadow:var(--shadow);height:420px;display:grid}
+    .hero-media > *{width:100%;height:100%;object-fit:cover}
+    .chips{display:flex;gap:.5rem;flex-wrap:wrap;margin:.5rem 0}
+    .chip{border:1px dashed #e6d8ef;border-radius:999px;padding:.2rem .6rem;background:#fff}
+
+    .section{padding:1.8rem 0}
+    .row{display:flex;gap:.6rem;flex-wrap:wrap}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+    @media (max-width:980px){.grid{grid-template-columns:1fr 1fr}.hero{grid-template-columns:1fr}}
+    @media (max-width:640px){.grid{grid-template-columns:1fr}}
+
+    .card{background:var(--paper);border:1px solid #f1e6f6;border-radius:16px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}
+    .card img{width:100%;height:220px;object-fit:cover}
+    .card-body{padding:.9rem;display:grid;gap:.35rem}
+    .price{font-weight:900;color:#7a2e6a}
+    .muted{color:var(--muted)}
+    .note{font-size:.95rem;color:var(--muted)}
+
+    /* Flavor filters */
+    .filters{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}
+    .tag{border:1px solid #eadcf2;padding:.35rem .7rem;border-radius:999px;background:#fff;cursor:pointer}
+    .tag.active{background:linear-gradient(180deg,#fff8ff,#ffe1f3);border-color:#f1b6dd}
+
+    /* Timeline */
+    .timeline{position:relative;padding-left:1rem}
+    .timeline:before{content:"";position:absolute;left:.35rem;top:.2rem;bottom:.2rem;width:3px;background:linear-gradient(var(--pink),var(--yellow),var(--blue),var(--mint))}
+    .titem{position:relative;margin:.8rem 0;padding-left:1rem}
+    .titem:before{content:"";position:absolute;left:-.12rem;top:.35rem;width:12px;height:12px;border-radius:50%;background:var(--pink);box-shadow:0 0 0 4px #ffe6f5}
+
+    /* Gallery */
+    .masonry{column-count:3;column-gap:1rem}
+    .masonry img{width:100%;margin:0 0 1rem;border-radius:14px;border:1px solid #f1e6f6}
+    @media (max-width:900px){.masonry{column-count:2}}
+    @media (max-width:600px){.masonry{column-count:1}}
+
+    /* Footer */
+    .ftr{margin-top:2rem;background:linear-gradient(90deg,var(--pink),var(--yellow),var(--mint),var(--blue),var(--lav));background-size:220% 220%;animation:shift 16s linear infinite}
+    @keyframes shift{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+    .ftr-inner{max-width:1160px;margin:0 auto;padding:1rem;color:#2a2133;display:grid;grid-template-columns:1.2fr .8fr;gap:1rem}
+    @media (max-width:760px){.ftr-inner{grid-template-columns:1fr}}
+    .pill{border:1px solid #00000022;background:#ffffffcc;border-radius:999px;padding:.25rem .6rem;display:inline-block;margin:.2rem}
+
+    /* Utility */
+    .visually-hidden{position:absolute!important;width:1px;height:1px;clip:rect(0,0,0,0);overflow:hidden;white-space:nowrap}
+  </style>
+</head>
+<body>
+<canvas id="sprinkles"></canvas>
+<header class="hdr">
+  <div class="brand">
+    <span class="scoop" aria-hidden="true"></span><span class="drip" aria-hidden="true"></span>
+    <span><b>SPRINKLE CITY</b><br><small class="muted">Creamery • Sorbets • Floats</small></span>
+  </div>
+  <nav class="nav" aria-label="Primary">
+    <a href="#menu">Menu</a>
+    <a href="#flavors">Flavors</a>
+    <a href="#about">About</a>
+    <a href="#events">Events</a>
+    <a href="#visit">Visit</a>
+    <button id="printBtn" class="btn" title="Print menu">🖨️ Print</button>
+    <button id="themeBtn" class="btn" title="Toggle dark mode">🌓</button>
+  </nav>
+</header>
+
+<main class="page">
+  <!-- HERO -->
+  <section class="hero" aria-labelledby="home-title">
+    <div class="hero-card">
+      <h1 id="home-title">Small‑batch scoops with big, happy energy.</h1>
+      <p class="lede">We churn classic and creative flavors in‑house — from Madagascar Vanilla Bean to Midnight Lavender, with vegan sorbets that slap. Pull up for a cone, a float, or our Friday night open‑mic. No online checkout — order at the window, stay for the vibes.</p>
+      <div class="chips" aria-label="Highlights">
+        <span class="chip">Gluten‑free cones available</span>
+        <span class="chip">Vegan & dairy‑free options</span>
+        <span class="chip">Local milk & fruit</span>
+      </div>
+      <div class="row">
+        <a href="#menu" class="btn primary">See Menu</a>
+        <a href="#events" class="btn">This Week's Events</a>
+      </div>
+    </div>
+    <div class="hero-media" aria-label="Shop video">
+      <!-- Video demo: replace src with your hosted MP4/WebM; poster ensures it looks good if autoplay blocks -->
+      <video muted playsinline loop autoplay poster="https://images.unsplash.com/photo-1556745757-8d76bdb6984b?q=80&w=1400&auto=format&fit=crop">
+        <source src="" type="video/mp4" />
+        <!-- Fallback hero image -->
+        <img src="https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=1400&auto=format&fit=crop" alt="Scoops being served" />
+      </video>
+    </div>
+  </section>
+
+  <!-- MENU (prices only; pay at counter) -->
+  <section id="menu" class="section" aria-labelledby="menu-title">
+    <h2 id="menu-title">Menu</h2>
+    <p class="muted">Prices include tax where applicable. Cones: Cup • Cake • Waffle (+$1). Add house‑made hot fudge, caramel, or strawberry sauce (+$1).</p>
+    <div class="grid">
+      <article class="card" aria-labelledby="scoops-title">
+        <img src="https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=1400&auto=format&fit=crop" alt="Ice cream scoops" />
+        <div class="card-body">
+          <h3 id="scoops-title">Scoops</h3>
+          <div class="item"><strong>Single</strong> <span class="price">$4.50</span></div>
+          <div class="item"><strong>Double</strong> <span class="price">$6.75</span></div>
+          <div class="item"><strong>Triple</strong> <span class="price">$8.25</span></div>
+          <p class="note">Gluten‑free cone +$1 • Sprinkles +$0.50 • Extra sauce +$0.75</p>
+        </div>
+      </article>
+      <article class="card" aria-labelledby="sundae-title">
+        <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?q=80&w=1400&auto=format&fit=crop" alt="Loaded sundae" />
+        <div class="card-body">
+          <h3 id="sundae-title">Sundaes</h3>
+          <div class="item"><strong>Classic Hot Fudge</strong> <span class="price">$7.50</span></div>
+          <div class="item"><strong>Strawberry Shortcake</strong> <span class="price">$8.25</span></div>
+          <div class="item"><strong>Cookie Monster</strong> <span class="price">$8.75</span></div>
+          <p class="note">Whipped cream, cherry, and one topping included.</p>
+        </div>
+      </article>
+      <article class="card" aria-labelledby="floats-title">
+        <img src="https://images.unsplash.com/photo-1621262277592-1445e98d81f2?q=80&w=1400&auto=format&fit=crop" alt="Root beer float" />
+        <div class="card-body">
+          <h3 id="floats-title">Floats & Shakes</h3>
+          <div class="item"><strong>Root Beer Float</strong> <span class="price">$5.75</span></div>
+          <div class="item"><strong>Classic Shake</strong> <span class="price">$6.50</span></div>
+          <div class="item"><strong>Thick Shake</strong> <span class="price">$7.25</span></div>
+          <p class="note">Vanilla • Chocolate • Strawberry • Cookies & Cream • Malt +$0.50</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- FLAVORS with filters, favorites -->
+  <section id="flavors" class="section" aria-labelledby="flavors-title">
+    <h2 id="flavors-title">Today's Flavors</h2>
+    <div class="filters" style="margin-bottom:.6rem">
+      <span class="muted">Filter:</span>
+      <button class="tag active" data-tag="all">All</button>
+      <button class="tag" data-tag="classic">Classic</button>
+      <button class="tag" data-tag="adventure">Adventure</button>
+      <button class="tag" data-tag="vegan">Vegan</button>
+      <button class="tag" data-tag="sorbet">Sorbet</button>
+      <span class="muted" style="margin-left:.6rem">Search:</span>
+      <input id="flavorSearch" placeholder="Type to search…" style="padding:.5rem .7rem;border-radius:10px;border:1px solid #eadcf2" />
+      <span class="badge" id="favCount">❤ 0</span>
+    </div>
+    <div id="flavorGrid" class="grid"></div>
+    <p class="muted">Tap the heart on a flavor to save it to your favorites (this device only).</p>
+  </section>
+
+  <!-- Gallery -->
+  <section class="section" aria-labelledby="gallery-title">
+    <h2 id="gallery-title">Gallery</h2>
+    <div class="masonry">
+      <img src="https://images.unsplash.com/photo-1529675641475-1c6c4a7a7e87?q=80&w=1200&auto=format&fit=crop" alt="Rainbow sprinkles" />
+      <img src="https://images.unsplash.com/photo-1526318472351-c75fcf070305?q=80&w=1200&auto=format&fit=crop" alt="Waffle cones" />
+      <img src="https://images.unsplash.com/photo-1532678465554-94846274c297?q=80&w=1200&auto=format&fit=crop" alt="Two cones" />
+      <img src="https://images.unsplash.com/photo-1534704861284-5fdfb3b1c0a5?q=80&w=1200&auto=format&fit=crop" alt="Sundae bar" />
+      <img src="https://images.unsplash.com/photo-1488900128323-21503983a07e?q=80&w=1200&auto=format&fit=crop" alt="Shakes" />
+    </div>
+  </section>
+
+  <!-- ABOUT + FUTURE PLANS timeline -->
+  <section id="about" class="section" aria-labelledby="about-title">
+    <h2 id="about-title">About & Future Plans</h2>
+    <div class="grid">
+      <div class="card" style="grid-column:1/-1">
+        <div class="card-body">
+          <p>We’re a neighborhood creamery focused on joyful flavors and community. We churn in small batches, rotate seasonal specials, and donate a portion of proceeds from event nights to local youth arts.</p>
+          <div class="timeline">
+            <div class="titem"><strong>Now</strong>: Weekly open‑mic Fridays; monthly flavor collab with local bakers.</div>
+            <div class="titem"><strong>Fall</strong>: Launching a traveling ice‑cream cart for block parties.</div>
+            <div class="titem"><strong>Winter</strong>: Pints program (pre‑orders), limited holiday gift boxes.</div>
+            <div class="titem"><strong>Next Spring</strong>: Backyard community garden for herbs & edible flowers.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EVENTS (incl. Open Mic hosting) -->
+  <section id="events" class="section" aria-labelledby="events-title">
+    <h2 id="events-title">Events</h2>
+    <div class="grid" id="eventGrid"></div>
+    <p class="muted">Want to <strong>host an open‑mic or pop‑up</strong> here? <a href="#visit">Contact us</a> with your date, setup needs, and a short blurb. We provide a small PA and two mics.</p>
+  </section>
+
+  <!-- VISIT / CONTACT -->
+  <section id="visit" class="section" aria-labelledby="visit-title">
+    <h2 id="visit-title">Visit</h2>
+    <div class="grid">
+      <div class="card">
+        <div class="card-body">
+          <h3>Hours</h3>
+          <ul>
+            <li>Mon–Thu: 12:00p – 9:00p</li>
+            <li>Fri–Sat: 12:00p – 10:00p</li>
+            <li>Sun: 12:00p – 8:00p</li>
+          </ul>
+          <h3>Address</h3>
+          <p>77 Sprinkles Ave<br>Springfield, USA</p>
+          <p>Call: <a href="tel:+15559871234">(555) 987‑1234</a></p>
+          <button id="printMenu2" class="btn">🖨️ Print Menu</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <h3>Contact</h3>
+          <form id="contactForm" novalidate>
+            <label class="visually-hidden" for="name">Name</label>
+            <input id="name" name="name" placeholder="Your name" required />
+            <label class="visually-hidden" for="email">Email</label>
+            <input id="email" name="email" type="email" placeholder="you@example.com" required />
+            <select id="topic" required>
+              <option value="" disabled selected>Pick a topic…</option>
+              <option>Open‑mic hosting</option>
+              <option>Private party</option>
+              <option>Event catering</option>
+              <option>Other</option>
+            </select>
+            <textarea id="message" placeholder="Tell us a bit more…" required></textarea>
+            <div class="row"><button class="btn primary" type="submit">Send</button><span id="formStatus" class="muted" aria-live="polite"></span></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="ftr">
+  <div class="ftr-inner">
+    <div>
+      <strong>Sprinkle City Creamery</strong>
+      <div>
+        <span class="pill">Vegan options</span>
+        <span class="pill">Small‑batch</span>
+        <span class="pill">Community events</span>
+        <span class="pill">All‑ages</span>
+      </div>
+      <p>© <span id="year"></span> Sprinkle City. All rights reserved.</p>
+    </div>
+    <div>
+      <div class="pill">Instagram</div>
+      <div class="pill">TikTok</div>
+      <div class="pill">YouTube</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Theme + print
+  const themeBtn = document.getElementById('themeBtn');
+  const printBtn = document.getElementById('printBtn');
+  const printBtn2 = document.getElementById('printMenu2');
+  const themeKey='sc_theme';
+  if(localStorage.getItem(themeKey)==='dark') document.documentElement.classList.add('dark');
+  themeBtn.addEventListener('click',()=>{document.documentElement.classList.toggle('dark');localStorage.setItem(themeKey,document.documentElement.classList.contains('dark')?'dark':'light')});
+  [printBtn, printBtn2].forEach(b=>b?.addEventListener('click',()=>window.print()));
+  document.getElementById('year').textContent=new Date().getFullYear();
+
+  // Sprinkles canvas animation
+  (function sprinkles(){
+    const c = document.getElementById('sprinkles');
+    const ctx = c.getContext('2d');
+    let w,h,spr=[]; const colors=['#ff8ccf','#ffd86b','#7ed8ff','#a8f0d1','#cbb8ff'];
+    function resize(){w=c.width=window.innerWidth; h=c.height=window.innerHeight}
+    window.addEventListener('resize',resize); resize();
+    for(let i=0;i<140;i++){spr.push({x:Math.random()*w,y:Math.random()*h,l:8+Math.random()*14,a:Math.random()*Math.PI,spd:.3+Math.random()*1,col:colors[i%colors.length]})}
+    function tick(){ctx.clearRect(0,0,w,h); for(const s of spr){ctx.save(); ctx.translate(s.x,s.y); ctx.rotate(s.a); ctx.fillStyle=s.col; ctx.fillRect(-s.l/2,-2,s.l,4); ctx.restore(); s.y+=s.spd; s.a+=.004; if(s.y>h+20){s.y=-20; s.x=Math.random()*w;}}
+      requestAnimationFrame(tick)} tick();
+  })();
+
+  // Flavors data
+  const FLAVORS=[
+    {id:1,name:'Madagascar Vanilla Bean',tags:['classic'],desc:'Rich, creamy, specks of real vanilla.',img:'https://images.unsplash.com/photo-1526318472351-c75fcf070305?q=80&w=1200&auto=format&fit=crop'},
+    {id:2,name:'Double Chocolate Fudge',tags:['classic'],desc:'Dark cocoa with ribbons of fudge.',img:'https://images.unsplash.com/photo-1580910051074-3eb694886505?q=80&w=1200&auto=format&fit=crop'},
+    {id:3,name:'Midnight Lavender',tags:['adventure'],desc:'Floral, moody, a little mysterious.',img:'https://images.unsplash.com/photo-1505576399279-565b52d4ac71?q=80&w=1200&auto=format&fit=crop'},
+    {id:4,name:'Strawberry Basil',tags:['adventure'],desc:'Mac‑erated berries, garden basil finish.',img:'https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?q=80&w=1200&auto=format&fit=crop'},
+    {id:5,name:'Mango Chili Sorbet',tags:['vegan','sorbet'],desc:'Bright mango with a warm chili kick.',img:'https://images.unsplash.com/photo-1488477181946-6428a0291777?q=80&w=1200&auto=format&fit=crop'},
+    {id:6,name:'Cookie Butter Swirl',tags:['classic'],desc:'Spiced cookie crumbs and caramel.',img:'https://images.unsplash.com/photo-1541599188778-cdc73298e1f9?q=80&w=1200&auto=format&fit=crop'},
+    {id:7,name:'Pistachio Rose',tags:['adventure'],desc:'Nutty, floral, deeply aromatic.',img:'https://images.unsplash.com/photo-1551024709-8f23befc6cf7?q=80&w=1200&auto=format&fit=crop'},
+    {id:8,name:'Lemon Poppyseed Sorbet',tags:['vegan','sorbet'],desc:'Tart lemon with a crunchy poppy bite.',img:'https://images.unsplash.com/photo-1511910849309-0dffb4a6f55f?q=80&w=1200&auto=format&fit=crop'}
+  ];
+
+  // Favorites + filters
+  const favKey='sc_favs';
+  const flavorGrid=document.getElementById('flavorGrid');
+  const flavorSearch=document.getElementById('flavorSearch');
+  const favCount=document.getElementById('favCount');
+  const tags=[...document.querySelectorAll('.tag')];
+  function readFavs(){try{return new Set(JSON.parse(localStorage.getItem(favKey)||'[]'))}catch(_){return new Set}}
+  function writeFavs(set){localStorage.setItem(favKey,JSON.stringify([...set]))}
+  function renderFlavors(){
+    const activeTag = document.querySelector('.tag.active')?.dataset.tag || 'all';
+    const q = (flavorSearch.value||'').toLowerCase();
+    const favs = readFavs();
+    let list = FLAVORS.filter(f=> activeTag==='all' || f.tags.includes(activeTag));
+    if(q) list = list.filter(f=> (f.name+f.desc).toLowerCase().includes(q));
+    flavorGrid.innerHTML = list.map(f=>`<article class="card"><img src="${f.img}" alt="${f.name}"><div class="card-body"><div class="row" style="justify-content:space-between;align-items:center"><h3 style="margin:0">${f.name}</h3><button class="btn" data-fav="${f.id}" aria-label="Save favorite">${favs.has(f.id)?'❤ Saved':'♡ Save'}</button></div><p class="muted">${f.desc}</p><div class="row">${f.tags.map(t=>`<span class="chip">${t}</span>`).join('')}</div></div></article>`).join('');
+    favCount.textContent = `❤ ${favs.size}`;
+  }
+  tags.forEach(t=>t.addEventListener('click',()=>{tags.forEach(x=>x.classList.remove('active')); t.classList.add('active'); renderFlavors();}));
+  flavorSearch.addEventListener('input', renderFlavors);
+  flavorGrid.addEventListener('click', (e)=>{
+    const b = e.target.closest('[data-fav]'); if(!b) return;
+    const id = Number(b.getAttribute('data-fav')); const favs = readFavs();
+    if(favs.has(id)) favs.delete(id); else favs.add(id);
+    writeFavs(favs); renderFlavors(); confetti(b);
+  });
+  renderFlavors();
+
+  // Tiny confetti burst for favorites
+  function confetti(el){
+    const rect = el.getBoundingClientRect();
+    const cx = rect.left + rect.width/2; const cy = rect.top;
+    const burst = document.createElement('canvas'); burst.style.position='fixed'; burst.style.left='0'; burst.style.top='0'; burst.width=innerWidth; burst.height=innerHeight; burst.style.pointerEvents='none'; document.body.appendChild(burst);
+    const ctx = burst.getContext('2d'); const parts = []; const colors=['#ff8ccf','#ffd86b','#7ed8ff','#a8f0d1','#cbb8ff'];
+    for(let i=0;i<60;i++){parts.push({x:cx,y:cy,dx:(Math.random()-0.5)*6,dy:-Math.random()*6-2,life:60+Math.random()*20,col:colors[i%colors.length]});}
+    function tick(){ctx.clearRect(0,0,burst.width,burst.height); let alive=false; for(const p of parts){p.x+=p.dx; p.y+=p.dy; p.dy+=0.15; p.life--; if(p.life>0){alive=true; ctx.fillStyle=p.col; ctx.fillRect(p.x,p.y,4,4);} }
+      if(alive) requestAnimationFrame(tick); else document.body.removeChild(burst); }
+    tick();
+  }
+
+  // Events (demo data)
+  const EVENTS=[
+    {title:'Open‑Mic Friday', when:'Every Fri 7–9p', desc:'Poetry, acoustic sets, comedy. Family‑friendly. Sign‑ups 6:30p.', img:'https://images.unsplash.com/photo-1506157786151-b8491531f063?q=80&w=1400&auto=format&fit=crop'},
+    {title:'Kids Storytime + Scoops', when:'Sat 2p (monthly)', desc:'Local librarian reads 3 books; mini‑sundae special.', img:'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=1400&auto=format&fit=crop'},
+    {title:'Maker Pop‑Up', when:'Last Sun 1–4p', desc:'Crafts & zines from neighborhood artists. 10% goes to youth arts.', img:'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1400&auto=format&fit=crop'}
+  ];
+  const eventGrid=document.getElementById('eventGrid');
+  eventGrid.innerHTML = EVENTS.map(e=>`<article class="card"><img src="${e.img}" alt="${e.title}"><div class="card-body"><h3>${e.title}</h3><div class="muted">${e.when}</div><p>${e.desc}</p></div></article>`).join('');
+
+  // Contact form (demo only)
+  const cForm=document.getElementById('contactForm'); const cStatus=document.getElementById('formStatus');
+  cForm.addEventListener('submit', (e)=>{e.preventDefault(); const name=cForm.name.value.trim(); const email=cForm.email.value.trim(); const topic=document.getElementById('topic').value; const message=document.getElementById('message').value.trim(); if(!name||!email||!topic||!message){cStatus.textContent='Please complete all fields.'; return;} if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){cStatus.textContent='Enter a valid email.'; return;} cStatus.textContent='Thanks! We\'ll reply soon. (demo)'; cForm.reset(); });
+</script>
+</body>
+</html>
